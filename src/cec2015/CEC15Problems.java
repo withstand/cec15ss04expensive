@@ -90,7 +90,7 @@ public class CEC15Problems {
     public void setCurrentRun(int run) {
         currentRun = run;
     }
-    public int getCurrentRun(int run) {
+    public int getCurrentRun() {
         return currentRun;
     }
     
@@ -357,7 +357,7 @@ public class CEC15Problems {
             }
         }
 
-        getFuncEvalCounter(currentRun).eval(func_num, nx, x, f);
+        getFuncEvalCounter(getCurrentRun()).eval(func_num, nx, x, f);
 
         return f;
     }
