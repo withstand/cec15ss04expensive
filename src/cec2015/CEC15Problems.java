@@ -102,7 +102,7 @@ public class CEC15Problems {
      * mx:         sample size
      * func_num:   function number
      */
-    public double[] test_func(double[] x, int nx, int mx, int func_num) {
+    public double[] eval(double[] x, int nx, int mx, int func_num) {
         double[] f = new double[mx];
 
         Arrays.fill(f, Constants.INF);

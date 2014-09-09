@@ -55,10 +55,10 @@ public class Test {
             xx[i] = 0.5;
         }
 
-        double[] yy = tf.test_func(xx, 2, 2, 26);
+        double[] yy = tf.eval(xx, 2, 2, 26);
 
         System.out.println(Arrays.toString(yy));
-        tf.test_func(xx, 10, 1, 1);
+        tf.eval(xx, 10, 1, 1);
 
         for (i = 0; i < 30; i++) {
             func_num = i + 1;
@@ -97,7 +97,7 @@ public class Test {
             // }
             // input.close();
             for (k = 0; k < 1; k++) {
-                f = tf.test_func(x, n, m, func_num);
+                f = tf.eval(x, n, m, func_num);
 
                 for (j = 0; j < m; j++) {
                     System.out.println("f" + func_num + "(x[" + (j + 1) + "])=" + f[j] + " @ "
