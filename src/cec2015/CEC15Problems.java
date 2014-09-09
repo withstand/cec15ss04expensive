@@ -90,7 +90,17 @@ public class CEC15Problems {
     public void setCurrentRun(int run) {
         currentRun = run;
     }
-
+    public int getCurrentRun(int run) {
+        return currentRun;
+    }
+    
+    public int nextRun() {
+        currentRun ++;
+        return currentRun;
+    }
+    
+    
+    
     public void flush() {
         rr.flush();
     }
