@@ -19,31 +19,76 @@ import input_data.DataReader;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CEC15Problems {
-    private final ResultRecorder rr  = new ResultRecorder("test");
-    private final FEvCount       fec = new FEvCount(30, 100, rr);
-    double[]                     OShift, M, y, z, x_bound;
-    int                          ini_flag, n_flag, func_flag;
-    int[]                        SS;
+    private final ResultRecorder      rr;//               = new ResultRecorder("test");
+    private final ArrayList<FEvCount> funcEvalCounters = new ArrayList<FEvCount>();
+    double[]                          OShift, M, y, z, x_bound;
+    int                               ini_flag, n_flag, func_flag;
+    int[]                             SS;
+    private int                       currentRun;
 
-    public CEC15Problems() {}
-
-    public FEvCount getFuncEvalCount() {
-        return fec;
+    public CEC15Problems(String resultFilePrefix) {
+        rr = new ResultRecorder(resultFilePrefix);
+        currentRun = 1;
+    }
+    public CEC15Problems() {
+        rr = null;
+        currentRun = 1;
     }
 
-    public int getCount(int func_num, int nx) {
-        return fec.getCount(func_num, nx);
+//  public FEvCount getFuncEvalCount() {
+//      return fec;
+//  }
+//  public int getCount(int func_num, int nx) {
+//      return fec.getCount(func_num, nx);
+//  }
+    public double[] getCurrentBestX(int func_num, int n) {
+        return getCurrentBestX(func_num, n, currentRun);
+    }
+
+    public int getEvalCount(int func_num, int n) {
+        return getEvalCount(func_num, n, currentRun);
+    }
+
+    public double getCurrentBest(int func_num, int n) {
+        return getCurrentBest(func_num, n, currentRun);
+    }
+
+    public double[] getCurrentBestX(int func_num, int n, int run) {
+        return getFuncEvalCounter(run).getCurrentBestX(func_num, n);
+    }
+
+    public int getEvalCount(int func_num, int n, int run) {
+        return getFuncEvalCounter(run).getCount(func_num, n);
+    }
+
+    public double getCurrentBest(int func_num, int n, int run) {
+        return getFuncEvalCounter(run).getCurrentBest(func_num, n);
+    }
+
+    private FEvCount getFuncEvalCounter(int run) {
+        for (FEvCount counter : funcEvalCounters) {
+            if (counter.getCurrentRun() == run) {
+                return counter;
+            }
+        }
+
+        return (new FEvCount(30, 100, run, rr));
     }
 
     public void addRecordRule(int dim, int[] recordPoints) {
-        rr.addRecordRule(dim, recordPoints);
+        if (rr!=null)rr.addRecordRule(dim, recordPoints);
     }
 
-    public void setFilenamePrefix(String name) {
-        rr.setFilenamePrefix(name);
+//    public void setFilenamePrefix(String name) {
+//        rr.setFilenamePrefix(name);
+//    }
+
+    public void setCurrentRun(int run) {
+        currentRun = run;
     }
 
     public void flush() {
@@ -66,7 +111,6 @@ public class CEC15Problems {
         int cf_num = 10, i, j;
 
         // for func_num = 23-28 cf_num = 8
-
         if (ini_flag == 1) {
             if ((n_flag != nx) || (func_flag != func_num)) /* check if nx or func_num are changed, reinitialization */ {
                 ini_flag = 0;
@@ -303,7 +347,7 @@ public class CEC15Problems {
             }
         }
 
-        fec.eval(func_num, nx, x, f);
+        getFuncEvalCounter(currentRun).eval(func_num, nx, x, f);
 
         return f;
     }

@@ -42,12 +42,12 @@ public class Test {
         n = 30;
         x = new double[m * n];
 
-        CEC15Problems tf = new CEC15Problems();
+        CEC15Problems tf = new CEC15Problems("result20130905/result");
         int[]         r  = { 1, 2, 3, 4 };
 
         tf.addRecordRule(10, r);
         tf.addRecordRule(30, r);
-        tf.setFilenamePrefix("result20130905/result");
+        //tf.setFilenamePrefix();
 
         double[] xx = new double[10];
 
@@ -105,12 +105,11 @@ public class Test {
                 }
             }
 
-            double[] bx = tf.getFuncEvalCount().getCurrentBestX(func_num, n);
-
-            System.out.println("f" + func_num + "-d" + n + " has been evaluated "
-                               + tf.getFuncEvalCount().getCount(func_num, n) + " times.");
-            System.out.println("\tCurrent best value = " + tf.getFuncEvalCount().getCurrentBest(func_num, n) + " @ "
-                               + Arrays.toString(tf.getFuncEvalCount().getCurrentBestX(func_num, n)));
+            
+            System.out.println("f" + func_num + "-d" + n + " has been evaluated " + tf.getEvalCount(func_num, n)
+                               + " times.");
+            System.out.println("\tCurrent best value = " + tf.getCurrentBest(func_num, n) + " @ "
+                               + Arrays.toString(tf.getCurrentBestX(func_num, n)));
         }
 
         tf.flush();

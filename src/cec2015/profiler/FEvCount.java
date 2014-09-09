@@ -21,15 +21,17 @@ public class FEvCount {
     private final int          maxDimension;
     private final int          problemCount;
     private ResultRecorder     recorder;
+    private final int          currentRun;
 
-    public FEvCount(int problemCount, int maxDimension) {
-        this(problemCount, maxDimension, null);
+    public FEvCount(int problemCount, int maxDimension, int run) {
+        this(problemCount, maxDimension, run, null);
     }
 
-    public FEvCount(int problemCount, int maxDimension, ResultRecorder rr) {
+    public FEvCount(int problemCount, int maxDimension, int run, ResultRecorder rr) {
         recorder          = rr;
         this.problemCount = problemCount;
         this.maxDimension = maxDimension;
+        currentRun        = run;
         counts            = new int[problemCount + 1][maxDimension + 1];
         currentBest       = new double[problemCount + 1][maxDimension + 1];
         currentBestX      = new double[problemCount + 1][maxDimension + 1][];
@@ -38,11 +40,15 @@ public class FEvCount {
             for (int j = 1; j < counts[i].length; j++) {
                 counts[i][j]       = 0;
                 currentBest[i][j]  = Constants.INF;
-                currentBestX[i][j] = new double[j];
+                currentBestX[i][j] = null;
             }
         }
     }
 
+    public int getCurrentRun() {
+        return currentRun;
+    }
+    
     public void setRocorer(ResultRecorder rr) {
         recorder = rr;
     }
@@ -88,7 +94,7 @@ public class FEvCount {
                 double[] tx = new double[nx];
 
                 System.arraycopy(x, i * nx, tx, 0, nx);
-                recorder.record(func_num, nx, getCount(func_num, nx) + i + 1, currentBestX[func_num][nx],
+                recorder.record(func_num, nx, currentRun, getCount(func_num, nx) + i + 1, currentBestX[func_num][nx],
                                 currentBest[func_num][nx]);
             }
         }

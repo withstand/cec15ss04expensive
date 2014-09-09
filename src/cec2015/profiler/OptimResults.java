@@ -11,12 +11,9 @@ package cec2015.profiler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -27,12 +24,13 @@ public class OptimResults {
     private final ArrayList<Double>   ydata        = new ArrayList<Double>();
     private final ArrayList<Integer>  recordnumber = new ArrayList<Integer>();
     private String                    filename;
-    private final int                 func_num, dim;
+    private final int                 func_num, dim, runtime;
 
-    OptimResults(String resultfilename, int func_num, int dim) {
+    OptimResults(String resultfilename, int func_num, int dim, int runtime) {
         filename      = resultfilename;
         this.func_num = func_num;
         this.dim      = dim;
+        this.runtime  = runtime;
     }
 
     void setFilename(String fn) {
@@ -45,6 +43,10 @@ public class OptimResults {
 
     public int getDim() {
         return dim;
+    }
+
+    public int getRuntime() {
+        return runtime;
     }
 
     void record(int count, double[] x, double fx) {
