@@ -39,7 +39,7 @@ public class Test {
         File                 fpt;
 
         m = 3;
-        n = 30;
+        n = 10;
         x = new double[m * n];
 
         CEC15Problems tf = new CEC15Problems("result20130905/result");
@@ -104,7 +104,8 @@ public class Test {
                                        + Arrays.toString(Arrays.copyOfRange(x, j * n, (j + 1) * n)));
                 }
             }
-
+            
+            System.out.println("Runs " + Arrays.toString(tf.getRuns()));
             
             System.out.println("f" + func_num + "-d" + n + " has been evaluated " + tf.getEvalCount(func_num, n)
                                + " times.");

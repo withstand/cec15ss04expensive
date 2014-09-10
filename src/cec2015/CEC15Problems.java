@@ -23,20 +23,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CEC15Problems {
-    private final ResultRecorder      rr;//               = new ResultRecorder("test");
     private final ArrayList<FEvCount> funcEvalCounters = new ArrayList<FEvCount>();
+    private final ResultRecorder      rr;    // = new ResultRecorder("test");
     double[]                          OShift, M, y, z, x_bound;
     int                               ini_flag, n_flag, func_flag;
     int[]                             SS;
     private int                       currentRun;
+    private final ArrayList<Integer>  runs = new ArrayList<Integer>();
 
-    public CEC15Problems(String resultFilePrefix) {
-        rr = new ResultRecorder(resultFilePrefix);
-        currentRun = 1;
+    private CEC15Problems(int run, ResultRecorder r) {
+        rr = r;
+        currentRun = run;
+        runs.add(run);
     }
     public CEC15Problems() {
-        rr = null;
-        currentRun = 1;
+        this(1, null);
+    }
+
+    public CEC15Problems(String resultFilePrefix) {
+        this(1,new ResultRecorder(resultFilePrefix));
     }
 
 //  public FEvCount getFuncEvalCount() {
@@ -75,32 +80,49 @@ public class CEC15Problems {
                 return counter;
             }
         }
-
-        return (new FEvCount(30, 100, run, rr));
+        FEvCount fc = new FEvCount(30, 100, run, rr);
+        funcEvalCounters.add(fc);
+        
+        return fc;
     }
 
     public void addRecordRule(int dim, int[] recordPoints) {
-        if (rr!=null)rr.addRecordRule(dim, recordPoints);
+        if (rr != null) {
+            rr.addRecordRule(dim, recordPoints);
+        }
     }
 
-//    public void setFilenamePrefix(String name) {
-//        rr.setFilenamePrefix(name);
-//    }
-
+//  public void setFilenamePrefix(String name) {
+//      rr.setFilenamePrefix(name);
+//  }
     public void setCurrentRun(int run) {
-        currentRun = run;
+        if (runs.contains(run)) {
+            currentRun = run;
+        }else {
+            runs.add(run);
+            currentRun = run;
+        }
+      
     }
+
     public int getCurrentRun() {
         return currentRun;
     }
-    
-    public int nextRun() {
-        currentRun ++;
-        return currentRun;
+
+    public int [] getRuns() {
+        int [] ret = new int[runs.size()];
+        for (int i=0; i<ret.length; i++) {
+            ret[i] = runs.get(i);
+        }
+        Arrays.sort(ret);
+        return ret;        
     }
     
-    
-    
+    public int nextRun() {
+        setCurrentRun(getCurrentRun()+1);        
+        return getCurrentRun();
+    }
+
     public void flush() {
         rr.flush();
     }
@@ -161,12 +183,10 @@ public class CEC15Problems {
             ini_flag  = 1;
         }
 
-        double[] t = new double[nx];
+        double[] t;    // = new double[nx];
 
         for (i = 0; i < mx; i++) {
-            for (j = 0; j < nx; j++) {
-                t[j] = x[i * nx + j];
-            }
+            t = Arrays.copyOfRange(x, i * nx, (i + 1) * nx);
 
             switch (func_num) {
             case 1 :
