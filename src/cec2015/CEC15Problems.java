@@ -24,44 +24,42 @@ import java.util.Arrays;
 
 public class CEC15Problems {
     private final ArrayList<FEvCount> funcEvalCounters = new ArrayList<FEvCount>();
+    private final ArrayList<Integer>  runs             = new ArrayList<Integer>();
     private final ResultRecorder      rr;    // = new ResultRecorder("test");
-    double[]                          OShift, M, y, z, x_bound;
-    int                               ini_flag, n_flag, func_flag;
-    int[]                             SS;
+    private double[]                  OShift, M, y, z, x_bound;
+    private int                       ini_flag, n_flag, func_flag;
+    private int[]                     SS;
     private int                       currentRun;
-    private final ArrayList<Integer>  runs = new ArrayList<Integer>();
 
-    private CEC15Problems(int run, ResultRecorder r) {
-        rr = r;
-        currentRun = run;
-        runs.add(run);
-    }
+    /*
+     * Constructor:
+     * Default: Start run count with 1, no result file output.
+     * Result recording: Start run count with 1, specifiy output director and fill prefix like "PSO/result"
+     */
     public CEC15Problems() {
         this(1, null);
     }
 
     public CEC15Problems(String resultFilePrefix) {
-        this(1,new ResultRecorder(resultFilePrefix));
+        this(1, new ResultRecorder(resultFilePrefix));
     }
 
-//  public FEvCount getFuncEvalCount() {
-//      return fec;
-//  }
-//  public int getCount(int func_num, int nx) {
-//      return fec.getCount(func_num, nx);
-//  }
-    public double[] getCurrentBestX(int func_num, int n) {
-        return getCurrentBestX(func_num, n, currentRun);
+    /*
+     * Private constructor function:
+     */
+    private CEC15Problems(int run, ResultRecorder r) {
+        rr         = r;
+        currentRun = run;
+        runs.add(run);
     }
 
-    public int getEvalCount(int func_num, int n) {
-        return getEvalCount(func_num, n, currentRun);
-    }
-
-    public double getCurrentBest(int func_num, int n) {
-        return getCurrentBest(func_num, n, currentRun);
-    }
-
+    /*
+     * 3 Function evaluation recording functions:
+     *   CurrentBestX,
+     *   CurrentBest function value,
+     *   current evaluation count
+     * If the 3rd parameter is ommited, it will get information for current run.
+     */
     public double[] getCurrentBestX(int func_num, int n, int run) {
         return getFuncEvalCounter(run).getCurrentBestX(func_num, n);
     }
@@ -74,37 +72,78 @@ public class CEC15Problems {
         return getFuncEvalCounter(run).getCurrentBest(func_num, n);
     }
 
-    private FEvCount getFuncEvalCounter(int run) {
-        for (FEvCount counter : funcEvalCounters) {
-            if (counter.getCurrentRun() == run) {
-                return counter;
-            }
-        }
-        FEvCount fc = new FEvCount(30, 100, run, rr);
-        funcEvalCounters.add(fc);
-        
-        return fc;
+    public double[] getCurrentBestX(int func_num, int n) {
+        return getCurrentBestX(func_num, n, getCurrentRun());
     }
 
+    public int getEvalCount(int func_num, int n) {
+        return getEvalCount(func_num, n, getCurrentRun());
+    }
+
+    public double getCurrentBest(int func_num, int n) {
+        return getCurrentBest(func_num, n, getCurrentRun());
+    }
+
+    /*
+     * Recording rules are applied dimension-wise
+     * Likely, for 10D problems, the total function evaluations should be 50D=500.
+     * We may want to record at the following evaluation:
+     *   50, 100, 150, 200, 250, 300, 350, 400, 450, 500
+     *
+     * int[] rp = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500}
+     * prob.addRecordRule(10, rp);
+     *
+     */
     public void addRecordRule(int dim, int[] recordPoints) {
         if (rr != null) {
             rr.addRecordRule(dim, recordPoints);
         }
     }
 
-//  public void setFilenamePrefix(String name) {
-//      rr.setFilenamePrefix(name);
-//  }
+    /*
+     * Dealing with different runs of the optimization codes.
+     * If we demand the partitipants to run the optimization code 20 times to collect statistics data,
+     * we have to record current-best results for each run.
+     *
+     * There are two ways to make sure we get the right recording.
+     *
+     *
+     * 1. Use default run, start with 1, and call nextRun increase the current run count.
+     *
+     * CEC15Problems prob = new CEC15Problems("PSOresult/result");
+     * for (int run = 0; run < 20; run++) {
+     *   //optimization code
+     *
+     *   prob.nextRun();
+     * }
+     *
+     * 2. Or we can explicitly set run count by setCurrentRun.
+     *
+     * CEC15Problems prob = new CEC15Problems("PSOresult/result");
+     * for (int run = 1; run <= 20; run++) {
+     *   prob.setCurrentRun(run);
+     *   //optimization code
+     *
+     * }
+     */
+    public int nextRun() {
+        setCurrentRun(getCurrentRun() + 1);
+
+        return getCurrentRun();
+    }
+
     public void setCurrentRun(int run) {
         if (runs.contains(run)) {
             currentRun = run;
-        }else {
+        } else {
             runs.add(run);
             currentRun = run;
         }
-      
     }
 
+    /*
+     * Helper functions for running time recording.
+     */
     public int getCurrentRun() {
         return currentRun;
     }
@@ -117,22 +156,17 @@ public class CEC15Problems {
         Arrays.sort(ret);
         return ret;        
     }
-    
-    public int nextRun() {
-        setCurrentRun(getCurrentRun()+1);        
-        return getCurrentRun();
-    }
 
-    public void flush() {
+
+    /*
+     * Write results to real files.
+     */
+    public void writeResultToFiles() {
         rr.flush();
     }
 
     /*
-     * @params:
-     * x :         sample points
-     * nx:         dimension
-     * mx:         sample size
-     * func_num:   function number
+     * @params: x : sample points nx: dimension mx: sample size func_num: function number
      */
     public double[] eval(double[] x, int nx, int mx, int func_num) {
         double[] f = new double[mx];
@@ -158,6 +192,7 @@ public class CEC15Problems {
                 x_bound[i] = 100.0;
             }
 
+            //
             if (!((nx == 2) || (nx == 10) || (nx == 20) || (nx == 30) || (nx == 50) || (nx == 100))) {
                 System.out.println("\nError: Test functions are only defined for D=2,10,20,30,50,100.");
 
@@ -380,6 +415,25 @@ public class CEC15Problems {
         getFuncEvalCounter(getCurrentRun()).eval(func_num, nx, x, f);
 
         return f;
+    }
+    
+    private void makeStatistics() {
+        
+        
+    }
+
+    private FEvCount getFuncEvalCounter(int run) {
+        for (FEvCount counter : funcEvalCounters) {
+            if (counter.getCurrentRun() == run) {
+                return counter;
+            }
+        }
+
+        FEvCount fc = new FEvCount(30, 100, run, rr);
+
+        funcEvalCounters.add(fc);
+
+        return fc;
     }
 }
 

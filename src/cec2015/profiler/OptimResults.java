@@ -8,11 +8,11 @@ package cec2015.profiler;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import io.IOUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-
 import java.util.ArrayList;
 
 /**
@@ -49,6 +49,30 @@ public class OptimResults {
         return runtime;
     }
 
+    int[] getRecordPoints() {
+        if (recordnumber.isEmpty())
+            return null;
+        int[] ret = new int[recordnumber.size()];
+
+        for (int i = 0; i < recordnumber.size(); i++) {
+            ret[i] = recordnumber.get(i);
+        }
+
+        return ret;
+    }
+
+    double[] getRecordedY() {
+        if (ydata.isEmpty())
+            return null;
+        double[] ret = new double[ydata.size()];
+
+        for (int i = 0; i < ydata.size(); i++) {
+            ret[i] = ydata.get(i);
+        }
+
+        return ret;
+    }
+
     void record(int count, double[] x, double fx) {
         xdata.add(x);
         ydata.add(fx);
@@ -56,41 +80,11 @@ public class OptimResults {
     }
 
     void flush() {
-        try {
-            String fn      = filename + "-x.txt";
-            String dirname = null;
+        
+        
+        IOUtils.flush(filename+"-x.txt", reportX());
+        IOUtils.flush(filename+"-fx.txt", reportY());
 
-            if (fn.contains("/")) {
-                int slash = fn.lastIndexOf('/');
-
-                dirname = fn.substring(0, slash);
-            }
-
-            if (fn.contains("\\")) {
-                int slash = fn.lastIndexOf('\\');
-
-                dirname = fn.substring(0, slash);
-            }
-
-            if (dirname != null) {
-                File dir = new File(dirname);
-
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-            }
-
-            File        f   = new File(fn);
-            PrintStream out = new PrintStream(new FileOutputStream(f));
-
-            out.print(reportX());
-            out.close();
-            out = new PrintStream(new FileOutputStream(new File(filename + "-fx.txt")));
-            out.print(reportY());
-            out.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File Not Found when open output file.");
-        }
     }
 
     private String reportX() {
@@ -128,6 +122,8 @@ public class OptimResults {
         return rep;
     }
 }
+
+// ~ Formatted by Jindent --- http://www.jindent.com
 
 
 //~ Formatted by Jindent --- http://www.jindent.com
