@@ -1,6 +1,6 @@
 
 
-prefix = 'results\pattersearch\resultfile';
+prefix = 'results\simulannealbnd\resultfile';
 % with output filel prefix,
 % canbe dir\\filenameprefix or dir/filenameprefix
 prob = cec2015.CEC15Problems(prefix);
@@ -28,15 +28,14 @@ for runtime = 1:20
             x0 = -100+200*rand(dimension,1);
             
             func = @(x)(eval(prob,x,dimension,1,func_num));
-            [x,y] = patternsearch(func,x0,[],[],[],[],...
-                -100*ones(dimension,1),100*ones(dimension,1),[],...
-                psoptimset('display','final','MaxFunEvals',50*dimension));
+            [x,y] = simulannealbnd(func,x0,...
+                -100*ones(dimension,1),100*ones(dimension,1),...
+                saoptimset('display','iter','MaxFunEvals',50*dimension));
             
         end
         
     end
     
-    % prob.nextRun();
     
 end
 
