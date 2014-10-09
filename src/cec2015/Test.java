@@ -43,7 +43,7 @@ public class Test {
 		n = 10;
 		x = new double[m * n];
 
-		CEC15Problems tf = new CEC15Problems("result\\thisonefortest\\result");
+		CEC15Problems tf = new CEC15Problems("resultxxxx\\thisonefortest\\result");
 
 		double[] xx = new double[10];
 
@@ -51,10 +51,7 @@ public class Test {
 			xx[i] = 0.5;
 		}
 
-		double[] yy = tf.eval(xx, 2, 2, 26);
 
-		System.out.println(Arrays.toString(yy));
-		tf.eval(xx, 10, 1, 1);
 
 		for (i = 0; i < 15; i++) {
 			func_num = i + 1;
@@ -63,39 +60,19 @@ public class Test {
                         
                         System.arraycopy(xtmp, 0, x, 0, xtmp.length);
                         
-//			InputStream is = tf.getClass().getResourceAsStream("/input_data/shift_data_" + func_num + "_D" +  n +  ".txt");
-//			Scanner input = new Scanner(is);
-//
-//			for (k = 0; k < x.length; k++) {
-//				x[k] = input.nextDouble();
-//			}
-//
-//			for (int ii = 0; ii < x.length; ii++) {
-//
-//				// System.out.println(x[i]);
-//			}
-//
-//			input.close();
 
 			for (j = 0; j < n; j++) {
 				x[1 * n + j] = 0.0;
 
-				// System.out.println(x[1*n+j]);
 			}
 
 			for (j = 0; j < n; j++) {
 				x[2 * n + j] = 10.0;
 
-				/* printf("%Lf\n",x[1*n+j]); */
 			}
 
-			// fpt = new File("randdata_"+func_num+".txt");
-			// input = new Scanner(fpt);
-			// for(j=0;j<n;j++)
-			// {
-			// x[3*n+j] = input.nextDouble();
-			// }
-			// input.close();
+      			System.out.println("Run: " + tf.getCurrentRun());
+
 			for (k = 0; k < 1; k++) {
 				f = tf.eval(x, n, m, func_num);
 
@@ -105,7 +82,6 @@ public class Test {
 				}
 			}
 
-			System.out.println("Run: " + tf.getCurrentRun());
 			System.out.println("f" + func_num + "-d" + n + " has been evaluated " + tf.getEvalCount(func_num, n)
 					+ " times.");
 			System.out.println("\tCurrent best value = " + tf.getCurrentBest(func_num, n) + " @ "
