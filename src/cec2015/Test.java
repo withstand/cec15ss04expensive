@@ -7,15 +7,14 @@ package cec2015;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import input_data.DataReader;
 import ui.TextAreaOutputStream;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.File;
-import java.io.InputStream;
 
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * 
@@ -31,6 +30,8 @@ public class Test {
 
 		// TODO code application logic here
 		TextAreaOutputStream taos = new TextAreaOutputStream();
+                
+                System.out.println();
 		double[] OShift, M, y, z, x_bound;
 		int ini_flag = 0, n_flag, func_flag;
 		int[] SS;
@@ -45,8 +46,8 @@ public class Test {
 		CEC15Problems tf = new CEC15Problems("result20140924x\\result");
 		int[] r = { 1, 2, 3, 4 };
 
-		tf.addRecordRule(10, r);
-		tf.addRecordRule(30, r);
+		//tf.addRecordRule(10, r);
+		//tf.addRecordRule(30, r);
 
 		// tf.setFilenamePrefix();
 
@@ -61,22 +62,26 @@ public class Test {
 		System.out.println(Arrays.toString(yy));
 		tf.eval(xx, 10, 1, 1);
 
-		for (i = 0; i < 30; i++) {
+		for (i = 0; i < 15; i++) {
 			func_num = i + 1;
 
-			InputStream is = tf.getClass().getResourceAsStream("/input_data/shift_data_" + func_num + ".txt");
-			Scanner input = new Scanner(is);
-
-			for (k = 0; k < x.length; k++) {
-				x[k] = input.nextDouble();
-			}
-
-			for (int ii = 0; ii < x.length; ii++) {
-
-				// System.out.println(x[i]);
-			}
-
-			input.close();
+                        double xtmp[] = DataReader.readShiftData(func_num, n, 1);
+                        
+                        System.arraycopy(xtmp, 0, x, 0, xtmp.length);
+                        
+//			InputStream is = tf.getClass().getResourceAsStream("/input_data/shift_data_" + func_num + "_D" +  n +  ".txt");
+//			Scanner input = new Scanner(is);
+//
+//			for (k = 0; k < x.length; k++) {
+//				x[k] = input.nextDouble();
+//			}
+//
+//			for (int ii = 0; ii < x.length; ii++) {
+//
+//				// System.out.println(x[i]);
+//			}
+//
+//			input.close();
 
 			for (j = 0; j < n; j++) {
 				x[1 * n + j] = 0.0;
@@ -115,7 +120,7 @@ public class Test {
                 
                 tf.nextRun();
                 
-		for (i = 0; i < 29; i++) {
+		for (i = 0; i < 15; i++) {
 			func_num = i + 1;
 
 			//InputStream is = tf.getClass().getResourceAsStream("/input_data/shift_data_" + func_num + ".txt");
