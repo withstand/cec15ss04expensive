@@ -43,13 +43,7 @@ public class Test {
 		n = 10;
 		x = new double[m * n];
 
-		CEC15Problems tf = new CEC15Problems("result20140924x\\result");
-		int[] r = { 1, 2, 3, 4 };
-
-		//tf.addRecordRule(10, r);
-		//tf.addRecordRule(30, r);
-
-		// tf.setFilenamePrefix();
+		CEC15Problems tf = new CEC15Problems("result\\thisonefortest\\result");
 
 		double[] xx = new double[10];
 
@@ -182,6 +176,3 @@ public class Test {
 	}
 }
 
-// ~ Formatted by Jindent --- http://www.jindent.com
-
-// ~ Formatted by Jindent --- http://www.jindent.com

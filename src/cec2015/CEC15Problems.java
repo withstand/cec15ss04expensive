@@ -9,7 +9,6 @@ package cec2015;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import cec2015.math.Constants;
 import cec2015.math.Functions;
 
 import cec2015.profiler.FEvCount;
