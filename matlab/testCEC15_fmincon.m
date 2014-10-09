@@ -1,6 +1,6 @@
 
 
-prefix = 'results\GA\resultfile';
+prefix = 'results\fmincon\resultfile';
 % with output filel prefix,
 % canbe dir\\filenameprefix or dir/filenameprefix
 prob = cec2015.CEC15Problems(prefix);
@@ -9,6 +9,9 @@ prob = cec2015.CEC15Problems(prefix);
 % no function evaluation counting or result recording, the only valid
 % method are 
 %   prob.eval(x,dim, numberofx, function_number)
+
+
+
 for runtime = 1:20
     % specify runtime for prob
     setCurrentRun(prob, runtime);
@@ -25,11 +28,10 @@ for runtime = 1:20
             x0 = -100+200*rand(dimension,1);
             
             func = @(x)(eval(prob,x,dimension,1,func_num));
-            ps = min(dimension, 30);
-            [x,y] = ga(func,dimension,[],[],[],[],...
+            [x,y] = fmincon(func,x0,[],[],[],[],...
                 -100*ones(dimension,1),100*ones(dimension,1),[],...
-                gaoptimset('display','iter','PopulationSize',ps,...
-                'Generations',50*dimension/ps));
+                optimset('display','iter','MaxFunEvals',50*dimension,...
+                'algorithm','sqp'));
             
         end
         
