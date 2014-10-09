@@ -60,9 +60,8 @@ public final class DataReader {
 		}
 	}
 
-	public static int[] readShuffleData(int func_num, int nx, int cf_num) {
-		int size = ((func_num >= 17) && (func_num <= 22)) ? nx : (((func_num == 29) || (func_num == 30)) ? nx * cf_num
-				: -1);
+	public static int[] readShuffleData(int func_num, int nx) {
+		int size = nx;
 
 		if (size != -1) {
 			String fn = "/input_data/shuffle_data_" + func_num + "_D" + nx + ".txt";
@@ -75,7 +74,7 @@ public final class DataReader {
 	}
 
 	public static double[] readRotation(int func_num, int nx, int cf_num) {
-		int size = (func_num < 23) ? nx * nx : cf_num * nx * nx;
+		int size = (func_num < 13) ? nx * nx : cf_num * nx * nx;
 		String fn = "/input_data/M_" + func_num + "_D" + nx + ".txt";
 		InputStream dataFile = DataReader.class.getResourceAsStream(fn);
 
@@ -83,8 +82,8 @@ public final class DataReader {
 	}
 
 	public static double[] readShiftData(int func_num, int nx, int cf_num) {
-		int size = (func_num < 23) ? nx : nx * cf_num;
-		String fn = "/input_data/shift_data_" + func_num + ".txt";
+		int size = (func_num < 13) ? nx : nx * cf_num;
+		String fn = "/input_data/shift_data_" + func_num + "_D" + nx + ".txt";
 		InputStream dataFile = DataReader.class.getResourceAsStream(fn);
 
 		return readDouble(new Scanner(dataFile), size);
@@ -127,3 +126,4 @@ public final class DataReader {
 }
 
 // ~ Formatted by Jindent --- http://www.jindent.com
+
