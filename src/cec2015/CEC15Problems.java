@@ -99,15 +99,15 @@ public class CEC15Problems {
     }
 
     public double[] getCurrentBestX(int func_num, int n) {
-        return getCurrentBestX(func_num, n, getCurrentRun());
+        return getCurrentBestX(func_num, n, getNumberOfRun());
     }
 
     public int getEvalCount(int func_num, int n) {
-        return getEvalCount(func_num, n, getCurrentRun());
+        return getEvalCount(func_num, n, getNumberOfRun());
     }
 
     public double getCurrentBest(int func_num, int n) {
-        return getCurrentBest(func_num, n, getCurrentRun());
+        return getCurrentBest(func_num, n, getNumberOfRun());
     }
 
     /*
@@ -152,13 +152,13 @@ public class CEC15Problems {
      *
      * }
      */
-    public int nextRun() {
-        setCurrentRun(getCurrentRun() + 1);
+//    public int nextRun() {
+//        setCurrentRun(getCurrentRun() + 1);
+//
+//        return getCurrentRun();
+//    }
 
-        return getCurrentRun();
-    }
-
-    public void setCurrentRun(int run) {
+    public void setNumberOfRun(int run) {
         if (runs.contains(run)) {
             currentRun = run;
         } else {
@@ -170,7 +170,7 @@ public class CEC15Problems {
     /*
      * Helper functions for running time recording.
      */
-    public int getCurrentRun() {
+    public int getNumberOfRun() {
         return currentRun;
     }
 
@@ -411,8 +411,8 @@ public class CEC15Problems {
             // Apply f^*
         }
 
-        if (getFuncEvalCounter(getCurrentRun()) != null) {
-            getFuncEvalCounter(getCurrentRun()).eval(func_num, nx, x, f);
+        if (getFuncEvalCounter(getNumberOfRun()) != null) {
+            getFuncEvalCounter(getNumberOfRun()).eval(func_num, nx, x, f);
         }
 
         return f;

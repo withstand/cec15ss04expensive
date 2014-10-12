@@ -6,15 +6,18 @@ prefix = 'results\pattersearch\resultfile';
 prob = cec2015.CEC15Problems(prefix);
 % with 
 %   prob = cec2015.CEC15Problems();
-% no function evaluation counting or result recording, the only valid
-% method are 
+% no function evaluation counting or result recording, 
+%   eval(prob, x, dim, numberofx, function_number) 
+%      has performance advantages in Matlab than
 %   prob.eval(x,dim, numberofx, function_number)
 
 
 
 for runtime = 1:20
-    % specify runtime for prob
-    setCurrentRun(prob, runtime);
+    
+    % specify number of run for prob
+    % 
+    setNumberOfRun(prob, runtime);
     for dimension = [10,30]    
         
         % recording rules define at which evaluation point to record

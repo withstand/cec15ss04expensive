@@ -11,7 +11,7 @@ prob = cec2015.CEC15Problems(prefix);
 %   prob.eval(x,dim, numberofx, function_number)
 for runtime = 1:20
     % specify runtime for prob
-    setCurrentRun(prob, runtime);
+    setNumberOfRun(prob, runtime);
     for dimension = [10,30]    
         
         % recording rules define at which evaluation point to record

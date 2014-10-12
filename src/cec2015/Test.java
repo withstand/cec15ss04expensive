@@ -51,7 +51,7 @@ public class Test {
 			xx[i] = 0.5;
 		}
 
-
+               tf.setNumberOfRun(1);
 
 		for (i = 0; i < 15; i++) {
 			func_num = i + 1;
@@ -71,7 +71,7 @@ public class Test {
 
 			}
 
-      			System.out.println("Run: " + tf.getCurrentRun());
+      			System.out.println("Run: " + tf.getNumberOfRun());
 
 			for (k = 0; k < 1; k++) {
 				f = tf.eval(x, n, m, func_num);
@@ -88,8 +88,7 @@ public class Test {
 					+ Arrays.toString(tf.getCurrentBestX(func_num, n)));
 		}
                 
-                tf.nextRun();
-                
+               tf.setNumberOfRun(2);
 		for (i = 0; i < 15; i++) {
 			func_num = i + 1;
 
@@ -135,7 +134,7 @@ public class Test {
 				}
 			}
 
-			System.out.println("Run: " + tf.getCurrentRun());
+			System.out.println("Run: " + tf.getNumberOfRun());
 			System.out.println("f" + func_num + "-d" + n + " has been evaluated " + tf.getEvalCount(func_num, n)
 					+ " times.");
 			System.out.println("\tCurrent best value = " + tf.getCurrentBest(func_num, n) + " @ "
