@@ -64,10 +64,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cec15_test_func.h" />
+    <ClInclude Include="..\..\jkiss.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ecr_iml.c" />
     <ClCompile Include="..\..\evaluation_count_iml.c" />
+    <ClCompile Include="..\..\jkiss.c" />
     <ClCompile Include="..\..\main.c" />
     <ClCompile Include="..\..\record_result_iml.c" />
     <ClCompile Include="..\..\rp_iml.c" />

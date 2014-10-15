@@ -18,6 +18,9 @@
     <ClInclude Include="..\..\cec15_test_func.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\jkiss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ecr_iml.c">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\test_func_iml.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\jkiss.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
