@@ -5,7 +5,6 @@
 */
 
 
-#include <WINDOWS.H>      
 #include <stdio.h>
 #include <math.h>
 #include <malloc.h>
@@ -100,7 +99,11 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 			printf("\nError: Test functions are only defined for D=10,30.\n");
 		}
 		/* Load Matrix M*/
+		#ifdef _WINDOWS
 		sprintf(FileName, "../../../src/input_data/M_%d_D%d.txt", func_num,nx);
+		#else
+		sprintf(FileName, "../src/input_data/M_%d_D%d.txt", func_num,nx);		
+		#endif
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -113,7 +116,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 				printf("\nError: there is insufficient memory available!\n");
 			for (i=0; i<nx*nx; i++)
 			{
-				fscanf(fpt,"%Lf",&M[i]);
+				fscanf(fpt,"%f",&M[i]);
 			}
 		}
 		else
@@ -123,13 +126,17 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 				printf("\nError: there is insufficient memory available!\n");
 			for (i=0; i<cf_num*nx*nx; i++)
 			{
-				fscanf(fpt,"%Lf",&M[i]);
+				fscanf(fpt,"%f",&M[i]);
 			}
 		}
 		fclose(fpt);
 		
 		/* Load shift_data */
+		#ifdef _WINDOWS
 		sprintf(FileName, "../../../src/input_data/shift_data_%d_D%d.txt", func_num,nx);
+		#else
+		sprintf(FileName, "../src/input_data/shift_data_%d_D%d.txt", func_num,nx);
+		#endif
 		fpt = fopen(FileName,"r");
 		if (fpt==NULL)
 		{
@@ -143,7 +150,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 			printf("\nError: there is insufficient memory available!\n");
 			for(i=0;i<nx;i++)
 			{
-				fscanf(fpt,"%Lf",&OShift[i]);
+				fscanf(fpt,"%f",&OShift[i]);
 			}
 		}
 		else
@@ -155,13 +162,12 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 			{
 				for (j=0;j<nx;j++)
 				{
-					fscanf(fpt,"%Lf",&OShift[i*nx+j]);
+					fscanf(fpt,"%f",&OShift[i*nx+j]);
 				}
-				fscanf(fpt,"%*[^\n]%*c"); 
 			}
 			for (j=0;j<nx;j++)
 			{
-				fscanf(fpt,"%Lf",&OShift[(cf_num-1)*nx+j]);
+				fscanf(fpt,"%f",&OShift[(cf_num-1)*nx+j]);
 			}
 				
 		}
@@ -169,10 +175,15 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 
 
 		/* Load Shuffle_data */
-		
+		#ifdef _WINDOWS		
+		sprintf(FileName, "../../../src/input_data/shuffle_data_%d_D%d.txt", func_num,nx);
+		#else
+		sprintf(FileName, "../src/input_data/shuffle_data_%d_D%d.txt", func_num,nx);
+		#endif
+
 		if (func_num>=10&&func_num<=12)
 		{
-			sprintf(FileName, "../../../src/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			//sprintf(FileName, "../../../src/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{
@@ -181,6 +192,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 			SS=(int *)malloc(nx*sizeof(int));
 			if (SS==NULL)
 				printf("\nError: there is insufficient memory available!\n");
+
 			for(i=0;i<nx;i++)
 			{
 				fscanf(fpt,"%d",&SS[i]);
@@ -189,7 +201,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 		}
 		else if (func_num>=13)
 		{
-			sprintf(FileName, "../../../src/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
+			//sprintf(FileName, "../../../src/input_data/shuffle_data_%d_D%d.txt", func_num, nx);
 			fpt = fopen(FileName,"r");
 			if (fpt==NULL)
 			{

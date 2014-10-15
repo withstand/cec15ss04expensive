@@ -1,1 +1,5 @@
-abc
+cec15_test : cec15_test_func.h ecr_iml.c evaluation_count_iml.c main.c record_result_iml.c rp_iml.c test_func_iml.c
+	gcc -o cec15_test -lm -fPIC ecr_iml.c evaluation_count_iml.c main.c record_result_iml.c rp_iml.c test_func_iml.c 
+
+clean:
+	rm cec15_test

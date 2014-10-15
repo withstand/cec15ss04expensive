@@ -8,10 +8,8 @@ static double *recorded_fx10 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDI
 static double *recorded_x30 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM][30];
 static double *recorded_fx30 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM];
 
-double* get_add()
-{
-	return recorded_fx10;
-}
+int record_index(int evaluate_number, int dim);
+
 // index start from 0
 double* lazy_multi_dim_array4(int i, int j, int k, int l, double**orig, int imax, int jmax, int kmax, int lmax)
 {

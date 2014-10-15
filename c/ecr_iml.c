@@ -94,7 +94,7 @@ void make_stat(double *raw, double* stat, int length)
 	stat[4] = calculateStandardDeviation(raw, length);
 
 }
-
+int get_record_point(int dim, int index);
 int mkdirs(char *path);
 void write_result_statistics_to_file(char * dir, char * file_prefix)
 {
@@ -219,9 +219,9 @@ void write_result_statistics_to_file(char * dir, char * file_prefix)
 
 
 
+#include <errno.h>
 #ifdef _WINDOWS
 #include <direct.h>
-#include <errno.h>
 #define MKDIR(p) mkdir(p)
 #else
 #include <sys/stat.h>
