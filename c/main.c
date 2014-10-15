@@ -8,12 +8,12 @@ Dec. 12th 2013
 #include <math.h>
 #include <malloc.h>
 #include "cec15_test_func.h"
-#include "evaluation_count_record.h"
 
 //double *OShift,*M,*y,*z,*x_bound;
 //int ini_flag=0,n_flag,func_flag,*SS;
 #include <math.h>
 #include <stdlib.h>
+
 
 int main()
 {
@@ -22,9 +22,7 @@ int main()
 	double x30[30];
 	double f;
 
-	initialize_recording();
-
-
+	
 	for (run =1; run <=20; run++)
 	{
 		set_number_of_run(run);
@@ -40,13 +38,13 @@ int main()
 			{
 				for (j=0; j<30; j++)
 					x30[j] = -100.0 + 200.0 * ((double)rand()/(double)RAND_MAX);
-				cec15_test_func(x30, &f, 30, 1,fun_num);
-			}
-			printf("Evaluate cec15_test_func runtime:%d func_num:%d finished\n", run, fun_num);
+				cec15_test_func(x30, &f, 30, 1, fun_num);
+     		}
+
 		}
 	}
 
-	write_result_statistics_to_file("test/rcod", "result");
+	write_result_statistics_to_file("result/randomsampling", "result");
 
 }
 

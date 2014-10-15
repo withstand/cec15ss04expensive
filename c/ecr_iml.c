@@ -1,4 +1,4 @@
-#include "evaluation_count_record.h"
+
 
 #include "cec15_test_func.h"
 #include <string.h>
@@ -6,175 +6,42 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define MAX_OF_RUNS 20
-#define RECORDING_POINTS_NUM 19
-#define MAX_FUNCTION_NUMBER  15
-#define TIMES_OF_EVAL  50
-#define DIMS 2
+
 
 static int current_number_of_run = 1;
-
 static int number_of_runs[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 static int dims_to_eval[] = { 10, 30 };
 
+int* get_current_evaluated_count(int number_of_run, int func_number, int dim);
+double *getx(int number_of_run, int func_number, int dim, int evaluate_number);
+double *getfx(int number_of_run, int func_number, int dim, int evaluate_number);
+void getbest(double** x, double** fx, int dim, int run, int func_num);
 
-
-static float percent_of_record[] = { 0.01f, 0.02f, 0.03f, 0.04f, 0.05f, 0.06f, 0.07f, 0.08f,
-0.09f, 0.10f, 0.20f, 0.30f, 0.40f, 0.50f, 0.60f, 0.70f, 0.80f, 0.90f, 1.00f };
-
-static double *recorded_x10 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM][10];
-static double *recorded_fx10 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM];
-static double currentBest10[MAX_OF_RUNS][MAX_FUNCTION_NUMBER];
-static double currentBest10x[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][10];
-static double currentBest30[MAX_OF_RUNS][MAX_FUNCTION_NUMBER];
-static double currentBest30x[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][30];
-
-#define GETBEST(dim,i,j) (dim)==10? &currentBest10[i][j] : &currentBest30[i][j]
-#define GETBESTX(dim,i,j) (dim)==10? currentBest10x[i][j] : currentBest30x[i][j]
-
-static double *recorded_x30 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM][30];
-static double *recorded_fx30 = NULL;//[MAX_OF_RUNS][MAX_FUNCTION_NUMBER][RECORDING_POINTS_NUM];
-
-static int evaluate_counter_10[MAX_OF_RUNS][MAX_FUNCTION_NUMBER];
-static int evaluate_counter_30[MAX_OF_RUNS][MAX_FUNCTION_NUMBER];
-
-// index start from 0
-double* lazy_multi_dim_array4(int i, int j, int k, int l, double**orig, int imax, int jmax, int kmax, int lmax)
-{
-	if (*orig == NULL)
-		*orig = (double*)malloc(sizeof(double)*imax*jmax*kmax*lmax);
-	if (i >= 0 && i < imax &&j >= 0 && j < jmax && k >= 0 && k < kmax && l >= 0 && l < lmax) {
-		return *orig + i * jmax*kmax*lmax + j * kmax *lmax + k * lmax + k;
-	}
-}
-
-double* lazy_multi_dim_array3(int i, int j, int k, double**orig, int imax, int jmax, int kmax)
-{
-	if (*orig == NULL)
-		*orig = (double*)malloc(sizeof(double)*imax*jmax*kmax);
-	if (i >= 0 && i < imax &&j >= 0 && j < jmax && k >= 0 && k < kmax) {
-		return *orig + i * jmax * kmax + j * kmax + k;
-	}
-}
-
-
-void initialize_recording()
-{
-	int i, j;
-	memset(number_of_runs, 0, MAX_OF_RUNS*sizeof(int));
-	memset(evaluate_counter_10, 0, MAX_OF_RUNS*MAX_FUNCTION_NUMBER*sizeof(int));
-	memset(evaluate_counter_30, 0, MAX_OF_RUNS*MAX_FUNCTION_NUMBER*sizeof(int));
-
-	for (i = 0; i < MAX_OF_RUNS; i++)
-	{
-		for (j = 0; j < MAX_FUNCTION_NUMBER; j++)
-		{
-			currentBest10[i][j] = INF;
-			currentBest30[i][j] = INF;
-		}
-
-	}
-}
-
-
-void free_memory()
-{
-	free(recorded_x10);
-	free(recorded_fx10);
-	free(recorded_x30);
-	free(recorded_fx30);
-}
-
-
-int get_record_point(int dim, int index)
-{
-	return (int)floor(0.5 + (percent_of_record[index] * TIMES_OF_EVAL*dim));
-}
-
-// evaluate_number --  [1,2,3,4,5...]
-// dim -- 10,30
-int record_index(int evaluate_number, int dim)
-{
-	int i;
-	for (i = 0; i < RECORDING_POINTS_NUM; i++)
-	{
-		if (get_record_point(dim, i) == evaluate_number)
-			return i;
-	}
-	return -1;
-}
-
-double *getx(int number_of_run, int func_number, int dim, int evaluate_number)
-{
-	// record_index start from 0
-	int index_record = record_index(evaluate_number, dim);
-	double * ptr;
-	if (index_record != -1)
-	{
-		if (dim == 10)
-		{
-			return lazy_multi_dim_array4(number_of_run - 1, func_number - 1, index_record, 0,
-				&recorded_x10, MAX_OF_RUNS, MAX_FUNCTION_NUMBER, RECORDING_POINTS_NUM, dim);
-		}
-		else if (dim == 30)
-			return lazy_multi_dim_array4(number_of_run - 1, func_number - 1, index_record, 0,
-			&recorded_x30, MAX_OF_RUNS, MAX_FUNCTION_NUMBER, RECORDING_POINTS_NUM, dim);
-
-	}
-	return NULL;
-
-}
-
-double *getfx(int number_of_run, int func_number, int dim, int evaluate_number)
-{
-
-	int index_record = record_index(evaluate_number, dim);
-	double * ptr;
-	if (index_record != -1)
-	{
-		if (dim == 10)
-			return lazy_multi_dim_array3(number_of_run - 1, func_number - 1, index_record,
-			&recorded_fx10, MAX_OF_RUNS, MAX_FUNCTION_NUMBER, RECORDING_POINTS_NUM);
-
-		else if (dim == 30)
-			return lazy_multi_dim_array3(number_of_run - 1, func_number - 1, index_record,
-			&recorded_fx30, MAX_OF_RUNS, MAX_FUNCTION_NUMBER, RECORDING_POINTS_NUM);
-
-	}
-	return NULL;
-
-}
-int* get_current_evaluated_count(int number_of_run, int func_number, int dim)
-{
-	if (dim == 10)
-		return  &evaluate_counter_10[number_of_run - 1][func_number - 1];
-	else if (dim == 30)
-		return  &evaluate_counter_30[number_of_run - 1][func_number - 1];
-	else
-		return NULL;
-
-}
 void record(int number_of_run, int func_number, int dim, double* x, double fx)
 {
 	int *ec = get_current_evaluated_count(number_of_run, func_number, dim);
 	double *rx, *rfx;
-	double* best = GETBEST(dim, number_of_run - 1, func_number - 1);
-	double * bestx = GETBESTX(dim, number_of_run - 1, func_number - 1);
+
+	double* best = NULL;// = GETBEST(dim, number_of_run - 1, func_number - 1);
+	double * bestx = NULL;// = GETBESTX(dim, number_of_run - 1, func_number - 1);
+
+	getbest(&bestx, &best, dim, number_of_run , func_number);
+	if (fx < *best)
+	{
+		*best = fx;
+		memcpy(bestx, x, sizeof(double)* dim);
+	}
+
 	*ec += 1;
 
 	rx = getx(number_of_run, func_number, dim, *ec);
 	rfx = getfx(number_of_run, func_number, dim, *ec);
 	if (rx != NULL  && rfx != NULL) 
 	{
-
-		if (fx < *best)
-		{
-			*best = fx;
-			memcpy(bestx, x, sizeof(double)* dim);
-		}
-
 		memcpy(rx, bestx, dim*sizeof(double));
 		*rfx = *best;
+		//if (rfx==get_add())
+			//printf("%d, %d, %d, %d\n", number_of_run, func_number, dim, *ec);
 	}
 
 }
@@ -228,7 +95,7 @@ void make_stat(double *raw, double* stat, int length)
 
 }
 
-
+int mkdirs(char *path);
 void write_result_statistics_to_file(char * dir, char * file_prefix)
 {
 	char filename_x[FILENAME_MAX];
@@ -280,17 +147,18 @@ void write_result_statistics_to_file(char * dir, char * file_prefix)
 					for (dimi = 0; dimi < dim; dimi++)
 						fprintf(file_x, "%f\t", x[dimi]);
 					fprintf(file_x, "\n");
-					fprintf(file_fx, "%e\n", *fx);
+					fprintf(file_fx, "%f\n", *fx);
 					hist_fx[number_of_run - 1][rpn] = *fx;
-					if (rpn == RECORDING_POINTS_NUM)
-						statistics_raw[(dim - 10) / 20][func_num - 1][rpn] = *fx;
+					//if (rpn == RECORDING_POINTS_NUM-1)
+					//	statistics_raw[(dim - 10) / 20][func_num - 1][RECORDING_POINTS_NUM-1] = hist_fx[number_of_run-1][RECORDING_POINTS_NUM-1];
 				}
 
 				fclose(file_x);
 				fclose(file_fx);
+				
+				statistics_raw[(dim - 10) / 20][func_num - 1][number_of_run-1] = hist_fx[number_of_run-1][RECORDING_POINTS_NUM-1];
 			}
-
-
+			
 			// resultfile-hist-fx-dx.txt
 			sprintf(filename_hist, "%s/%s-hist-f%d-d%d.txt", dir, file_prefix, func_num, dim);
 			file_hist = fopen(filename_hist, "w");
