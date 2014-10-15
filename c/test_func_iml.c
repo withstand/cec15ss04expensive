@@ -116,7 +116,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 				printf("\nError: there is insufficient memory available!\n");
 			for (i=0; i<nx*nx; i++)
 			{
-				fscanf(fpt,"%f",&M[i]);
+				fscanf(fpt,"%lf",&M[i]);
 			}
 		}
 		else
@@ -126,7 +126,7 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 				printf("\nError: there is insufficient memory available!\n");
 			for (i=0; i<cf_num*nx*nx; i++)
 			{
-				fscanf(fpt,"%f",&M[i]);
+				fscanf(fpt,"%lf",&M[i]);
 			}
 		}
 		fclose(fpt);
@@ -150,24 +150,24 @@ void cec15_test_func(double *x, double *f, int nx, int mx,int func_num)
 			printf("\nError: there is insufficient memory available!\n");
 			for(i=0;i<nx;i++)
 			{
-				fscanf(fpt,"%f",&OShift[i]);
+				fscanf(fpt,"%lf",&OShift[i]);
 			}
 		}
 		else
 		{
 			OShift=(double *)malloc(nx*cf_num*sizeof(double));
 			if (OShift==NULL)
-			printf("\nError: there is insufficient memory available!\n");
+				printf("\nError: there is insufficient memory available!\n");
 			for(i=0;i<cf_num-1;i++)
 			{
 				for (j=0;j<nx;j++)
 				{
-					fscanf(fpt,"%f",&OShift[i*nx+j]);
+					fscanf(fpt,"%lf",&OShift[i*nx+j]);
 				}
 			}
 			for (j=0;j<nx;j++)
 			{
-				fscanf(fpt,"%f",&OShift[(cf_num-1)*nx+j]);
+				fscanf(fpt,"%lf",&OShift[(cf_num-1)*nx+j]);
 			}
 				
 		}
