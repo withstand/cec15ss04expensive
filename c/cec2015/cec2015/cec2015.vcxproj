@@ -63,14 +63,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\cec15_test_func.c" />
-    <ClCompile Include="..\..\evaluation_count_record.c" />
-    <ClCompile Include="..\..\main.c" />
+    <ClInclude Include="..\..\cec15_test_func.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\cec15_test_func.h" />
-    <ClInclude Include="..\..\evaluation_count_record.h" />
-    <ClInclude Include="..\..\recording_imp.h" />
+    <ClCompile Include="..\..\ecr_iml.c" />
+    <ClCompile Include="..\..\evaluation_count_iml.c" />
+    <ClCompile Include="..\..\main.c" />
+    <ClCompile Include="..\..\record_result_iml.c" />
+    <ClCompile Include="..\..\rp_iml.c" />
+    <ClCompile Include="..\..\test_func_iml.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
