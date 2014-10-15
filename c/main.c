@@ -33,20 +33,20 @@ int main()
 			for (i = 1; i<= 50 * 10; i++)
 			{
 				for (j=0; j<10; j++)
-					x10[j] = -100 + 200 * ((double)rand()/(double)RAND_MAX);
+					x10[j] = -100.0 + 200.0 * ((double)rand()/(double)RAND_MAX);
 				cec15_test_func(x10, &f, 10, 1,fun_num);
 			}
-			for (i=1; i<=50*30; i++)
+			for (i=1; i<= 50 * 30; i++)
 			{
 				for (j=0; j<30; j++)
-					x30[j] = -100 + 200 * ((double)rand()/(double)RAND_MAX);
+					x30[j] = -100.0 + 200.0 * ((double)rand()/(double)RAND_MAX);
 				cec15_test_func(x30, &f, 30, 1,fun_num);
 			}
+			printf("Evaluate cec15_test_func runtime:%d func_num:%d finished\n", run, fun_num);
 		}
 	}
 
-	write_result_statistics_to_file("test", "result");
-	free_memory();
+	write_result_statistics_to_file("test/rcod", "result");
 
 }
 
